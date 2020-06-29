@@ -1,0 +1,15 @@
+{% capture site_categories %}{% for category in site.categories %}{{ category | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
+{% assign categories_list = site_categories | split:',' | sort %}
+<header class="site-category" >
+  <ul class="entry-meta inline-list">
+    <h1>Categories</h1>
+    <hr>
+    {% for item in (0..site.categories.size) %}{% unless forloop.last %}
+      {% capture this_word %}{{ categories_list[item] | strip_newlines }}{% endcapture %}
+      <li><a href="/category/{{this_word }}" class="tag">
+      <span class="term">{{ this_word }}</span>
+      <span class="count">({{ site.categories[this_word].size }})</span>
+      </a></li>
+    {% endunless %}{% endfor %}
+  </ul>
+</header>
