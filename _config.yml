@@ -31,7 +31,7 @@ timezone: Asia/Seoul # see https://en.wikipedia.org/wiki/List_of_tz_database_tim
 
 
 # for Travis CI. (shit custom gem api...) ##################
-destination: ./docs
+destination: ./blog
 
 production_url: https://lcy960729.github.io/testblog.github.io/
 source_url: https://github.com/lcy960729/testblog.maker
