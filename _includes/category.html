@@ -6,7 +6,7 @@
     <hr>
     {% for item in (0..site.categories.size) %}{% unless forloop.last %}
       {% capture this_word %}{{ categories_list[item] | strip_newlines }}{% endcapture %}
-      <li><a href="/category/{{this_word }}" class="tag">
+      <li><a href="/testblog.github.io/category/{{this_word }}" class="tag">
       <span class="term">{{ this_word }}</span>
       <span class="count">({{ site.categories[this_word].size }})</span>
       </a></li>
