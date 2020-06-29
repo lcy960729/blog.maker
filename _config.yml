@@ -11,9 +11,6 @@
 #    |  |  \   --. /  .'.  \  |  |
 #    `--'   `----''--'   '--' `--'
 
-
-
-
 ## => Site Settings
 ##############################
 text_skin: default # "default" (default), "dark", "forest", "ocean", "chocolate", "orange"
@@ -119,7 +116,7 @@ pagination:
   title: ':title - :num'
   sort_field: 'date'
   sort_reverse: true
-  permalink: '/page:num/'
+  permalink: 'testblog.github.io/page:num/'
 
 autopages:
   enabled: false
