@@ -139,7 +139,7 @@ comments:
         clientSecret: 'cd232f3cfd8f69557d94f96de97ea4a5c41c44df' # GitHub Application Client Secret
         repository: 'lcy960729.github.io'
         owner: 'lcy960729' # GitHub repo owner
-        admin: ['lcy960729'] # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST. # - your GitHub Id
+        admin: 'lcy960729' # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST. # - your GitHub Id
 
     ## Disqus
     disqus:
