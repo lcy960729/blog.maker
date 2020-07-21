@@ -1,7 +1,9 @@
 {%- if jekyll.environment != 'development' -%}
+<div>asdf</div>
   {%- if site.comments.provider == 'disqus' -%}
     {%- include comments-providers/disqus.html -%}
   {%- elsif site.comments.provider == 'gitalk' -%}
+  <div>gittalk</div>
     {%- include comments-providers/gitalk.html -%}
   {%- elsif site.comments.provider == 'valine' -%}
     {%- include comments-providers/valine.html -%}
@@ -9,4 +11,3 @@
     {%- include comments-providers/custom.html -%}
   {%- endif -%}
 {%- endif -%}
-<div>asdf</div>
