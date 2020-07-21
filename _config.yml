@@ -16,10 +16,10 @@
 text_skin: default # "default" (default), "dark", "forest", "ocean", "chocolate", "orange"
 highlight_theme: tomorrow-night-eighties # "default" (default), "tomorrow", "tomorrow-night", "tomorrow-night-eighties", "tomorrow-night-blue", "tomorrow-night-bright"
 url: https://lcy960729.github.io # the base hostname & protocol for your site e.g. https://www.someone.com
-baseurl: /testblog.github.io # does not include hostname
-title: Your Site Title
+baseurl:  # does not include hostname
+title: Cy`s Tech Blog
 description: > # this means to ignore new lines until "Language & timezone"
-    Your Site Description
+    Cy`s Tech Blog
 
 ## => Language and Timezone
 ##############################
@@ -29,14 +29,14 @@ timezone: Asia/Seoul # see https://en.wikipedia.org/wiki/List_of_tz_database_tim
 # for Travis CI. (shit custom gem api...) ##################
 destination: ./blog
 
-production_url: https://lcy960729.github.io/testblog.github.io/
-source_url: https://github.com/lcy960729/testblog.maker
+production_url: https://lcy960729.github.io
+source_url: https://github.com/lcy960729/blog.maker
 
 safe: False
 lsi: False
 
 username: lcy960729
-repo: testblog.maker
+repo: blog.maker
 branch: master
 ############################################################
 
@@ -44,7 +44,7 @@ branch: master
 ##############################
 author:
     type: # "person" (default), "organization"
-    name: Your Name
+    name: Lee Chan Young
     url: https://lcy960729.github.io/
     avatar: # path or url of avatar image (square)
     bio: I am an amazing person.
@@ -63,7 +63,7 @@ author:
 
 ## => GitHub Repository (if the site is hosted by GitHub)
 ##############################
-repository: lcy960729 / testblog.github.io
+repository: lcy960729 / lcy960729.github.io
 repository_tree: master
 
 ## => Paths
