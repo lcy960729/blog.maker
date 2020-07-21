@@ -19,7 +19,6 @@ url: https://lcy960729.github.io # the base hostname & protocol for your site e.
 baseurl:  # does not include hostname
 title: Cy`s Tech Blog
 description: > # this means to ignore new lines until "Language & timezone"
-    Cy`s Tech Blog
 
 ## => Language and Timezone
 ##############################
@@ -138,9 +137,9 @@ comments:
     gitalk:
         clientID: '01d2e03b7c76897f67e8' # GitHub Application Client ID
         clientSecret: 'cd232f3cfd8f69557d94f96de97ea4a5c41c44df' # GitHub Application Client Secret
-        repository: 'blog.maker'
+        repository: 'lcy960729.github.io'
         owner: 'lcy960729' # GitHub repo owner
-        admin: ['lcy960729'] # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST. # - your GitHub Id
+        admin: ['lcy960729'], # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST. # - your GitHub Id
 
     ## Disqus
     disqus:
