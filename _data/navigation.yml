@@ -57,9 +57,9 @@ header:
     url: /about.html
 
 start-docs:
-  - title: 글쓰는 방법
-    children:
-      - title: Quick Start
-        url: /docs/en/quick-start
-      - title: Structure
-        url: /docs/en/structure
+  # - title: 글쓰는 방법
+  #   children:
+  #     - title: Quick Start
+  #       url: /docs/en/quick-start
+  #     - title: Structure
+  #       url: /docs/en/structure

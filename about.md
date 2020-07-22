@@ -8,15 +8,13 @@ titles:
 key: page-about
 show_title: false
 author: CY
-
-sidebar:
-  nav: start-docs
 ---
+<!-- sidebar:
+  nav: start-docs -->
+<!-- ![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg) -->
 
-![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg)
+1일 1커밋
 
-다같이 공부하며 나누는 장소
-
-```javascript
-(() => console.log('Hello, World!'))();
+```cpp
+printf("%s\n", "Hello, World!");
 ```

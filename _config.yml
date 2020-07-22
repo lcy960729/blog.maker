@@ -46,9 +46,9 @@ author:
     name: Lee Chan Young
     url: https://lcy960729.github.io/
     avatar: # path or url of avatar image (square)
-    bio: I am an amazing person.
+    bio: Lee ChanYoung
     email: lcy960729@gmail.com
-    facebook: # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
+    facebook: lcy960729 # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
     twitter: # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
     weibo: # "user_id"   the last part of your profile url, e.g. https://www.weibo.com/user_id/profile?...
     googleplus: # "user_id"   the last part of your profile url, e.g. https://plus.google.com/u/0/user_id
@@ -57,7 +57,7 @@ author:
     zhihu: # "user_name" the last part of your profile url, e.g. https://www.zhihu.com/people/user_name
     douban: # "user_name" the last part of your profile url, e.g. https://www.douban.com/people/user_name
     linkedin: # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
-    github: # "user_name" the last part of your profile url, e.g. https://github.com/user_name
+    github: lcy960729 # "user_name" the last part of your profile url, e.g. https://github.com/user_name
     npm: # "user_name" the last part of your profile url, e.g. https://www.npmjs.com/~user_name
 
 ## => GitHub Repository (if the site is hosted by GitHub)
@@ -172,16 +172,16 @@ search:
 
     ## Google Custom Search Engine
     google:
-        custom_search_engine_id: # Google Custom Search Engine ID
+        custom_search_engine_id: 006220676743019373757:y5iqq91q1sm # Google Custom Search Engine ID
 
 ## => Analytics
 ##############################
 analytics:
-    provider: false # false (default), "google", "custom"
+    provider: google # false (default), "google", "custom"
 
     ## Google Analytics
     google:
-        tracking_id: # Google Analytics id for the site
+        tracking_id: UA-173221569-1 # Google Analytics id for the site
         anonymize_ip: false # Anonymize IP tracking for Analytics
 
 ## => Build
