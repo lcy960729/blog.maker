@@ -13,8 +13,6 @@ author: CY
   nav: start-docs -->
 <!-- ![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg) -->
 
-1일 1커밋
-
 ```cpp
-printf("%s\n", "Hello, World!");
+ printf("개발자 어떻게 해요?");
 ```
