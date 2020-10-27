@@ -7,3 +7,4 @@ gem "jekyll-paginate-v2"
 gem 'wdm'
 gem 'rake'
 gem "activesupport", ">= 4.1.11"
+gem "kramdown-parser-gfm"
