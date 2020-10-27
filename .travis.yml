@@ -1,7 +1,8 @@
-sudo: false
-edge: true
 language: ruby
 cache: bundler
+dist: xenial
+os: linux
+
 rvm:
 - 2.4.2
 
