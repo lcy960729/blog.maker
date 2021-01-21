@@ -3,6 +3,7 @@ html,
 .root,
 .layout--page {
   height: 100%;
+  word-break: break-word;
 }
 
 .layout--page {
@@ -174,11 +175,19 @@ html,
   width: 220px;
   margin-top: 30px;
   margin-right: 15px;
+  
+  #categories_underLine{
+    display: none; 
+   }
+
   @media only screen and (max-width: 600px){
     margin: 0 auto;
     width: 100%;
-    border-bottom: 1px solid #cecece;
-    padding: 0px 20px;
+    padding: 10px 20px;
+
+    #categories_underLine{
+     display: block; 
+    }
   }
 }
 
