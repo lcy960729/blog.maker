@@ -14,5 +14,5 @@ author: CY
 <!-- ![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg) -->
 
 ```cpp
- printf("개발자 어떻게 해요?");
+ printf("게시글 중 잘못된 점, 궁금한 점, 더 좋은 방법들을 남겨주세요!!!");
 ```
