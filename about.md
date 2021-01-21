@@ -14,10 +14,10 @@ author: CY
 <!-- ![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg) -->
 
 알고리즘 풀이 및 개발 일지 블로그
-<br>  
+<br>
 
-| page | Link |
-|:---|:---|
+|Page|Link|  
+|:---|:---|  
 | GitHub    | [https://github.com/lcy960729](https://github.com/lcy960729)|  
 | BaekJoon  | [https://www.acmicpc.net/user/lcy960729](https://www.acmicpc.net/user/lcy960729)|
 <br>
