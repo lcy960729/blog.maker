@@ -7,8 +7,6 @@
 {%- elsif _titles -%}
   {%- include snippets/get-string-from-locale-config.html locale=_titles -%}
   {%- assign __return = __return -%}
-{%- elsif _subTitle -%}
-  {%- assign __return = _subTitle -%}
 {%- else -%}
   {%- assign __return = nil -%}
 {%- endif -%}

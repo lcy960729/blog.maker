@@ -1,5 +1,7 @@
 {%- include snippets/get-article-title.html article=include.article-%}
 {%- assign _article_title = __return -%}
+
+{%- include snippets/get-article-subTitle.html article=include.article-%}
 {%- assign _article_subTitle = __return -%}
 
 {%- if include.html != false -%}
@@ -20,7 +22,7 @@
         <header>
           <h1>{{ _article_title }}</h1>
           <br>
-          <h3>{{ _article_subTitle }}</h3>
+          <h2 style="font-size: 20px;">{{ _article_subTitle }}</h2>
         </header>
       {%- endif -%}
       {%- if _show_edit_on_github -%}
