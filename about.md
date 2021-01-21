@@ -15,14 +15,10 @@ author: CY
 
 알고리즘 풀이 및 개발 일지 블로그
 
-<br>
-
 Page | Link
 :----- | :-----
 GitHub | [https://github.com/lcy960729](https://github.com/lcy960729)
 BaekJoon | [https://www.acmicpc.net/user/lcy960729](https://www.acmicpc.net/user/lcy960729)
-
-<br>
 
 ```cpp
  printf("게시글 중 잘못된 점, 궁금한 점, 더 좋은 방법들을 남겨주세요!!!");
