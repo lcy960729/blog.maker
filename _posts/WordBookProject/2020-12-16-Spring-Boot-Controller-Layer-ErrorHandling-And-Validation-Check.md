@@ -157,6 +157,6 @@ BUILD SUCCESSFUL in 6s
 
 Vaild 체크 어노테이션이나 @RestControllerAdvice의 옵션들은 문서를 참고하자
 
-[Java Bean Validation Basics | Baeldung](https://www.baeldung.com/javax-validation)
+[Java Bean Validation Basics Baeldung](https://www.baeldung.com/javax-validation)
 
 [RestControllerAdvice - spring-web 5.1.1.RELEASE javadoc](https://javadoc.io/doc/org.springframework/spring-web/5.1.1.RELEASE/org/springframework/web/bind/annotation/RestControllerAdvice.html#annotations--)
