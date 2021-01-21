@@ -76,7 +76,7 @@ public class UserControllerTest {
 }
 ```
 
-@MockMvc는 스프링 mvc 동작을 재현할 수 있는 클래스이다
+MockMvc는 스프링 mvc 동작을 재현할 수 있는 클래스이다
 
 @MockBean은 실제로 구현한 객체가 아닌 가짜 객체이다. 현재 UserController는 UserService와 의존성이 있으므로 UserController에 대해서만 단위 테스트를 하기 위해선 가짜 UserService를 만들어준후 테스트 해야한다. 
 
