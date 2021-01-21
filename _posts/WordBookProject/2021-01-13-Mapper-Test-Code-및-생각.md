@@ -5,7 +5,7 @@ categories: wordbook-project
 author: CY
 key: Mapper Test Code 및 생각
 ---
-# 2020-01-13 :: Mapper Test Code 및 생각
+# 2021-01-13 :: Mapper Test Code 및 생각
 
 하루 전에 생각했던 Mapper Test code를 작성해보았다. 커스텀한 맵핑 규칙에 대해 테스트를  동작 하였고 전체적인 맵핑 메소드를 테스트 하였다. 아래는 작성해본 코드이다.
 

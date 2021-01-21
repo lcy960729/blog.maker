@@ -5,7 +5,7 @@ categories: wordbook-project
 author: CY
 key: Collection Object Null 처리
 ---
-# 2020-01-15 :: Collection Object Null 처리
+# 2021-01-15 :: Collection Object Null 처리
 
 Collection은 맵핑할때나 객체를 받아올때나 null 때문에 문제가 많았다. (내가 잘 처리한 방법을 모르는건가??)
 
