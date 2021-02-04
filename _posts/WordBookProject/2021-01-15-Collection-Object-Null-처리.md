@@ -7,7 +7,7 @@ key: Collection Object Null 처리
 ---
 # 2021-01-15 :: Collection Object Null 처리
 
-Collection은 맵핑할때나 객체를 받아올때나 null 때문에 문제가 많았다. (내가 잘 처리한 방법을 모르는건가??)
+Collection은 맵핑할때나 객체를 받아올때나 null 때문에 문제가 많았다. (깔끔하게 처리하는 방법이 뭘까...)
 
 그래서 일단은 내 프로젝트에서 약속으로 Entity에서 사용되는 Collection객체는 final로 정의하고
 
