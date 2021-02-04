@@ -1,20 +1,20 @@
 ---
-title: 'HTTP 1.1 Docs 정리 (최종 수정 날짜 : 2021-02-04)'
+title: 'HTTP 1.1 Reference - Semantics and Content (최종 수정 날짜 : 2021-02-04)'
 tags: Web HTTP
 categories: study
 author: CY
-key: HTTP 1.1 Docs 정리
+key: HTTP 1.1 Reference - Semantics and Content
 ---
 # 참고 자료
-* 이병록님이 번역하신 HTTP 1.1 Docs  
-  [https://roka88.dev/105](https://roka88.dev/105)
+* 이병록님이 번역하신 HTTP 1.1 Semantics and Content 번역본  
+  [https://roka88.dev/106](https://roka88.dev/106)
 * MDN Web Docs  
   [https://developer.mozilla.org/ko/docs/Web/HTTP](https://developer.mozilla.org/ko/docs/Web/HTTP)
 
 이외 자료는 내용 중 링크 추가
 ##### 틀린 내용, 부족한 내용 꼭 지적 부탁드립니다!
 
-# HTTP 1.1 정리
+# HTTP 1.1 Reference - Semantics and Content
 # 1. 간단한 설명
 
 HTTP 메시지는 요청 또는 응답을 나타낸다.
