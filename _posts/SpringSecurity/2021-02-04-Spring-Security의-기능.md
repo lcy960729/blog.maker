@@ -1,5 +1,5 @@
 ---
-title: 'Spring Security의 기능 (최종 수정일 2021-02-04)'
+title: 'Spring Security의 기능 (최종 수정 날짜 : 2021-02-04)'
 tags: Web SpringSecurity Spring
 categories: spring-security
 author: CY
