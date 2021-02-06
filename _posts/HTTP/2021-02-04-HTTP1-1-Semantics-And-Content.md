@@ -1,5 +1,5 @@
 ---
-title: 'HTTP 1.1 Reference - Semantics and Content (최종 수정 날짜 : 2021-02-04)'
+title: 'HTTP 1.1 Reference - Semantics and Content (최종 수정 날짜 : 2021-02-06)'
 tags: Web HTTP
 categories: http
 author: CY
