@@ -145,3 +145,173 @@ Content Coding은 주로 representations을 압축하거나 다른 용도로 사
 
 #### 3.1.2.2. Content-Encoding
 Content Encoding 헤더 필드는 미디어 타입의 정체성을 잃지 않고 압축될 수 있도록 하기 위해 사용한다. 하나 이상의 인코딩이 representations에 적용된 경우, 인코딩을 적용한 발신자는 해당 인코딩이 적용된 순서대로 Content-Encoding 헤더 필드를 생성해야한다. Content-Encoding 헤더는 Content-Type 헤더에 의해 참조되는 미디어 타입을 얻도록 디코드하는 방법을 클라이언트에게 알려준다. 서버에서는 요청 메시지의 표현에 허용되지 않는 콘텐츠 코딩이 있는 경우 415(Unsupported Media Type)상태 코드를 반환 한다.
+
+### 3.1.3. Audience Language
+#### 3.1.3.1. Language Tags
+Language Tags는 다른 사람에게 정보 전달을 위해 사용된 자연 언어를 식별한다. 컴퓨터 언어는 제외된다.
+
+HTTP는 Accept-Language 및 Content-Language 헤더 필드 내에서 언어 태그를 사용한다. Accept-Language는 Language-range 문법을 사용하고, Content-Language에서는 Language-tag 문법을 사용한다.
+
+Language Tag는 대소문자를 구분하지 않으며, 다중 Language Tag는 쉼표로 구분한다. 그리고 각 Language-tag는 -문자로 구분되는 한개 이상의 서브태그의 연속이다. Language-tag 내에서 공백은 허용되지 않는다.
+```
+Content-Language: ko        // 단일 Language Tag
+Content-Language: en-US     // -로 구분되는 서브태그의 연속
+Content-Language: en-US, ko // 다중 Language Tag
+```
+#### 3.1.3.2. Content-Language
+Content-Language 헤더 필드는 Represtation이 어떤 언어로 나타내는지 설명한다. Content-Language가 지정되지 않은 경우에는 Represtation이 모든 언어의 대상이라는것을 나타내기도 하지만 어떤 언어를 의도하는지를 모른다는 의미도 가질 수 있다. 그리고 모든 내용이 Language-tag의 대상 언어로만 작성되어 있지 않다는것을 알아야 한다.
+그렇기 때문에 Represtation내에 다국어가 존재한다고 해서 다국어 사용자들을 위한것이 아니다. 우리는 아래의 예제 Represtation을 한국인 대상으로 제공하는것으로 가정하자. 
+```
+안녕하세요 (Hello)
+```
+위와 같은 Represtation이 있을때 한국어와 영어가 함께 있다고 해서 `Content-Language : en, ko`라고 작성하는 것이 아니다. 
+우리는 한국인을 대상으로 제공하는 Represtation이므로 `Content-Language : ko`라고 작성하는것이 옳은 방법이다. 
+
+Content-Language는 모든 Media Type에 적용될 수 있다. 
+
+### 3.1.4. Identification
+#### 3.1.4.1 Identifying a Representation
+완전한 또는 부분적인 Represtation을 메시지 페이로드(요청이나 응답의 바디)로 전송할 때, 발신자는 그 표현에 해당하는 리소스의 식별자를 제공하거나 또는 수신자가 결정하는것이 바람직하다.
+
+##### Request Message
+요청에 Content-Location 헤더 필드가 있는 경우, Content-Location 헤더의 값에 의해 식별된 리소스라고 주장된다. 이러한 주장은 다른 방법으로 검증될 수 있는 경우가 아니면 신뢰할 수 없다. (당연히 요청하는 쪽에서 리소스가 식별되어있다고 주장하니깐 검증되지 않은 경우라면 신뢰할 수 없음) 이 정보는 수정된 내역 링크(리소스가 수정 되기 이전의 내용을 가진 link라고 생각하는데... 현재 내가 요청하는 URI가 이전에는 이러한 Link를 가졌었다고 보내면서 해당 리소스가 식별이 됐었다라는것을 표현하고 싶은건가??)를 나타낼때는 유용할 수 있다. 
+
+이외에는 Content-Location 헤더가 없다면 페이로드는 식별되지 않는다.
+
+##### Response Message
+1. 요청 메소드가 GET 또는 HEAD이고 응답 상태가 200(OK), 204(No Content), 206(Partial Content), 304(Not Modified)인 경우는 요청 URI는 식별된 유효한 리소스임을 나타낸다.
+
+2. 요청 메소드가 GET 또는 HEAD이고 응답 상태 코드가 203(Non-Authoriative Information)인 경우 서버와 클라이언트 사이에 있는 HTTP 프록시가 클라이언트에 도달하기 전에 응답을 변경하거나 추가 했다는것을 나타낸다.
+
+3. Response에서 Content-Location 헤더 필드가 있고 헤더 값이 유효한 요청 URI와 동일한 URI인 경우 페이로드는 유효한 요청 URI에 의해 식별된 리소스이다.
+
+4. Response에서 Content-Location 헤더 필드가 있고 헤더 값이 유효한 요청 URI와 다른 URI인 경우 발신자는 페이로드가 Content-Location 값으로 식별된 리소스의 표현이라고 단언한다. 이러한 주장은 다른 방법으로 검증될 수 있는 경우가 아니면 신뢰할 수 없다.
+
+5. 이외는 페이로드가 식별되지 않는다.
+
+#### 3.1.4.2. Content-Location
+`Content-Location` 헤더 필드는 메시지의 페이로드에 해당하는 특정 리소스의 식별자로 사용할 수 있는 URI를 참조한다. 메시지가 생성될때 이 URI에 대해 GET 요청을 수행한다면 200(OK) 응답은 메세지의 페이로드에 포함된 representation을 담고 있다.  
+```
+Content-Location = absolute-URI / partial-URI
+```
+Content-Location 값은 유효한 Request URI의 대체 값이 아니라 메타데이터를 표현한다.
+Content-Location이 2xx(Successful) 응답 메시지에 포함되고 그 값이 유효한 요청 URI와 동일한 URI를 가리킨다면 수신자는 페이로드를 메시지 작성 날짜로 표시된 시점의 해당 리소스의 현재 representation으로 간주할 수 있다.  
+(그냥 요청했을때의 representation으로 생각하면 됨). 
+
+* GET 또는 HEAD 요청의 경우, 이것은 서버가 Content-Location을 제공하지 않을 때의 기본 의미와 동일하다(제공하지 않다고 하더라도 URI를 GET 요청 후 2xx의 상태를 반환 한다는것은 리소스가 식별되었다는 뜻이니까?).
+
+* PUT 또는 POST와 같은 상태 변화 요청의 경우, 서버의 응답에 해당 리소스의 새로운 representation이 포함됨을 의미하며, 따라서 Content-Location을 제공하지 않고 해당 동작이 수행됐다 라는 representation (body와 상태코드로만 200, “It worked!”라고 응답한것)과는 구별이 된다.
+
+  이를 통해 어플리케이션은 후속 GET 요청 없이 로컬에 저장된 내용으로 업데이트할 수 있다.
+  예를 들어 내가 아래와 같은 form으로 송금하도록 한다.
+  ```html
+  <form action="/send-payment" method="post">
+    <p>
+      <label>Who do you want to send the money to?
+        <input type="text" name="recipient">
+      </label>
+    </p>
+
+    <p>
+      <label>How much?
+        <input type="number" name="amount">
+      </label>
+    </p>
+
+    <button type="submit">Send Money</button>
+  </form>
+  ```
+  양식이 제출되면 사이트에서는 거래 영수증을 생성 후 서버는 향후 영수증 접근을 위해 Content-Location에 영수증 URL을 표시할 수 있다.
+  ```
+  HTTP/1.1 200 OK
+  Content-Type: text/html; charset=utf-8
+  Content-Location: /my-receipts/38
+
+  <!doctype html>
+  (Lots of HTML…)
+
+  <p>You sent $38.00 to ExampleUser.</p>
+
+  (Lots more HTML…)
+  ```
+
+* 외외 메서드에서 Content-Location은 페이로드가 요청된 행동의 상태에 대한 표현을 보고하는 것을 나타내며, 주어진 URI에서 동일한 보고를 사용할 수 있음을 나타낸다 (GET을 사용한 향후 접근)
+
+요청 메시지로 Content-Location을 전송하는 사용자는 헤더에 보낼 값인 URI는 사용자가 이전에 Representation의 내용을 획득한 곳을 의미한다. 즉 사용자는 원래 Representation의 리소스에 대한 이전 링크를 제공하는 것이다.
+
+요청 메시지에서 Content-Location 필드를 수신하는 서버는 정보를 Representation의 일부로 저장하기 위한 메타 데이터가 아닌 임시 요청 컨텍스트로 취급해야한다. 서버는 요청 처리를 안내하거나 소스 링크 또는 버전 메타데이터 내의 다른 용도로 저장하기 위해 이 컨텍스트를 사용할 수 있다. 단 서버는 요청 의미를 변경하기 위해 이러한 컨텍스트 정보를 사용해서는 안된다.
+
+예를 들어 클라이언트가 협상된 리소스에 대해 PUT (리디렉션 x) 요청을 하고 서버가 PUT 요청을 수락하는 경우, 해당 리소스의 새로운 상태는 해당 PUT에 제공된 하나의 Representation과 일치할 것으로 예상된다. Content-Location은 협상된 표현 중 하나만 업데이트할 수 있는 역방향 컨텐츠 선택 식별자의 형태로 사용될 수 없다. 사용자가 후자의 의미를 원했다면 PUT을 Content-Location URI에 직접 적용했을것이다.
+
+> 솔직히 Content-Location 헤더의 역할과 의미가 잘 이해가 되지 않는다. 사용되는 예제도 잘 보이지 않을 뿐더러... 일단은 넘기는 걸로 (2021-02-06)
+
+## 3.2. Representation Data
+HTTP 메시지와 관련된 표현 데이터는 메시지의 페이로드 본문으로 제공되거나 메시지 의미 및 유효한 요청 URI에 의해 참조 된다. representation data는 representation metadata 헤더 필드에서 정의한 형식과 인코딩이다.
+
+representation data의 데이터 타입은 헤더필드 Content-Type 및 Content-Encoding을 통해 결정 된다. 순서가 지정된 2계층 인코딩 모델을 정의한다.
+
+representation-data := Content-Encoding( Content-Type( bits ) )
+컨텐츠 타입으로 지정된 데이터를 인코딩한것이 Representation Data가 되는것이다.
+
+## 3.3. Payload Semantics
+일부 HTTP 메시지는 payload 메시지로 전체 또는 부분 representation을 전송한다. 경우에 따라 페이로드에 관련 표현의 헤더필드(HEAD 메서드의 응답) 또는 representation data의 일부(206 (partial Content) 상태코드)만 포함될 수 있다.
+
+요청에서 페이로드의 목적은 메서드 의미론에 의해 정의된다. 예를 들어 PUT 요청의 페이로드에 있는 representation은 요청이 성공적으로 적용될 경우 대상 리소스의 원하는 상태를 나타낸다.
+(예를 들어 서버에 저장된 1번 user의 name이 user1이고 우리는 그 유저의 이름을 user2로 변경하고 싶다. 이때 put 요청을 아래처럼 나타 낼 수 있다.
+``` 
+PUT http://localhost/users/1 
+body : { 'name' : 'user2' }
+```
+성공적으로 응답 결과가 왔을 경우에는 1번 유저의 이름이 user2로 바뀌게 됨으로 요청에서 페이로드에 있는 representation은 리소스의 원하는 상태를 나타낸것임을 알수 있다.)
+
+POST 요청의 페이로드에 있는 representation은 대상 리소스가 처리할 정보를 나타낸다.
+(예를 들어 서버에 새로운 user를 만드는 요청을 보내 보자.
+``` 
+POST http://localhost/users 
+body : { 'name' : 'newUser' }
+```
+성공적으로 응답 결과가 왔을 경우 유저가 생성이 되었다는 의미이므로 요청에서 페이로드에 있는 representation은 리소스가 처리할 정보를 나타낸것임을 알 수 있다.)
+
+이에 대해 페이로드의 목적은 요청 메소드와 응답 상태 코드에 의해 모두 정의된다. GET에 대한 200(OK) 응답의 페이로드는 메시지 시작일에 리소스의 현재 상태는 나타낸다. POST에 대한 응답에서 200(OK) 응답의 페이로드는 처리 결과 또는 처리 적용 후 대상 리소스의 새 상태를 나타낼 수 있다. 오류 상태로 반환되는 경우 응답 메시지에 오류 상태와 오류 해결을 위한 제안되는 다음 단계를 설명하는 것과 같은 오류 조건을 나타내는 페이로드가 포함되어 있다.
+
+연관된 representation보다 페이로드를 구체적으로 기술하는 헤더 필드를 payload header fields라고 한다. 페이로드 헤더 필드는 메시지 구문 분석에 대한 영향 때문에 이 명세의 다른 부분에 정의되어 있다.
+* Header Field Name 
+* Content-Length
+* Content-Range
+* Trailer
+* Transfer-Encoding
+
+## 3.4. Content Negotiation
+응답이 성공이던 오류이던 페이로드 정보를 전달할 때, 서버는 다른 형식, 언어, 인코딩과 같은 정보를 표시하는 방법이 있다. 여러 사용자마다 어떤 representation을 가장 잘 전달하는지에 영향을 미칠 수 있는 능력, 특성, 선호도가 다를 수 있다. 이러한 이유로 HTTP는 콘텐츠 협상의 메커니즘을 제공한다.
+
+이 명세는 프로토콜 내에서 가시화할 수 있는 콘텐츠 협상의 2가지 패턴을 정의한다.
+서버가 사용자의 명시적 선호도에 따라 표현을 선택하는 proactive (사전)협상과, 서버가 사용자 에이전트가 선택할 수 있는 표현 목록을 제공하는 reactive(대응)협상이 있다. 그외 콘텐츠 협상 패턴으로는 사용자 매개변수에 따라 선택적으로 렌더링 되는 여러 부분으로 구성된 contitional contet, 사용자 특성에 따라 추가(더 구체적인) 요청을 하는 스크립트가 포함된 active content, Transparent Content Negotiation등이 있다. 여기서 콘텐츠 선택은 중개자가 수행한다. 이러한 패턴은 상호 배타적이지 않으며, 적용성과 실용성에서 각각 절충점을 가진다.
+
+모든 경우에서 HTTP는 리소스 의미론을 인식하지 못한다. 시간이 지남에 따라, 그리고 시간에 따라, 그리고 콘텐츠 협상의 다양한 차원에 걸쳐, 그리고 시간에 따른 리소스의 관찰된 표현의 sameness에 대해 서버가 요청하는 응답하는 일관성은 전적으로 어떤 항목이나 알고리즘이 그러한 응답을 선택하거나 생성하는가에 의해 결정된다 HTTP는 커튼 위에 있는 사람에게 관심을 두지 않는다.
+> 그냥 우리가 요청하는 헤더와 메서드와 리소스의 의미를 HTTP는 모른다는 말로, 개발자는 요청하는 의미대로 동작하게 만들어야한다는 뜻
+
+---
+두 콘텐츠 협상과 관련된 내용은 MDN에서 설명된 내용을 가져왔다. 가장 깔끔하게 쓰여졌다고 생각한다. 
+### 3.4.1. Proactive Negotiation (MDN 내용 참고)
+서버 주도 컨텐츠 협상 혹은 주도적인 협상에 있어서, 브라우저(혹은 사용자 에이전트라면 어떤 다른 종류든지)는 URL을 이용해 몇 개의 HTTP 헤더를 전송합니다. 이런 헤더들은 사용자의 우선적인 선택을 나타냅니다. 서버는 그것들을 힌트로써 사용하며 내부 알고리즘은 클라이언트로 서브하기 위한 최선의 컨텐츠를 선택하게 됩니다. 이 알고리즘은 서버 특유의 것이며 표준으로 정의된 것은 아닙니다.
+
+![ProactiveNegotiation](/assets/images/http1-1SemanticsAndContent/ProactiveNegotiation.png)
+
+HTTP/1.1 표준은 서버 주도 협상을 시작하는 표준 헤더 목록(Accept, Accept-Charset, Accept-Encoding, Accept-Language)을 정의하고 있습니다. 엄밀히 말하자면 User-Agent이 리스트 내에 없긴 하지만, 해당 헤더는, 좋은 관례가 아니라고 판단될지라도, 때때로 요청된 리소스의 특정 프레젠테이션을 전송하는데 사용되기도 합니다. 서버는 실제로 컨텐츠 협상에 있어 어떤 헤더가 사용될 지 (더 엄밀히 말하자면 연관된 응답 헤더) 가리키기 위해 Vary 헤더를 사용하므로 캐시는 최적으로 동작하게 됩니다.
+
+이것과 더불어, 클라이언트 힌트라고 부르는 헤더들을 이용 가능한 헤더 목록에 추가하려는 실험적인 제안도 존재합니다. 클라이언트 힌트는 사용자 에이전트가 실행 중인 기기의 종류가 무엇인지를 알려줍니다(예를 들어, 데스크톱 컴퓨터인지 모바일 기기인지)
+
+서버 주도 컨텐츠 협상이 리소스의 특정 프레젠테이션에 동의하기 위한 가장 일반적인 방법이긴 하지만, 몇 가지 결점을 가지고 있습니다:
+
+서버는 브라우저에 대한 전체적인 지식을 가지고 있지 않습니다. 클라이언트 힌트 확장이 있더라도, 서버는 브라우저의 수용 능력에 대한 완벽한 정보를 가지고 있진 않습니다. 클라이언트가 선택하는 리액티브 컨텐츠 협상과는 다르게, 서버 선택은 항상 다소 임의적입니다.
+클라이언트에 의한 정보는 상당히 장황하며(HTTP/2 헤더 압축은 이런 문제를 완화시킵니다) 사생활 침해에 대한 위협을 가지고 있습니다(HTTP 핑거프린팅).
+주어진 리소스의 몇몇 프레젠테이션이 전송되므로, 샤드된 캐시들은 덜 효율적이며 서버 구현은 좀 더 복잡해집니다.
+
+### 3.4.2. Reactive Negotiation (MDN 내용 참고)
+서버 주도 협상은 몇 가지 불리한 점 때문에 고통을 줍니다: 그것은 확장하기가 용이하지 않습니다. 협상 내에서 사용하는 기능 당 한 가지 헤더가 존재해야 합니다. 만약 스크린 크기, 해상도 혹은 또 다른 치수를 사용하고자 한다면, 새로운 HTTP 헤더가 반드시 만들어져야 합니다. 헤더의 전송은 반드시 모든 요청 상에서 이루어져야 합니다. 이것은 몇몇 헤더들에 있어서는 그리 문제될 것은 아니지만, 그런 헤더들이 결국 증가하여, 메시지 사이즈가 성능에 악영향이 끼치는 상황이 올 수도 있습니다. 정확한 헤더가 전송되면 전송될수록, 불확실성도 더욱 더 전송되어, 좀 더 많은 HTTP 흔적과 그와 관련된 개인정보들이 남게 됩니다.
+
+HTTP의 초창기부터, 프로토콜은 또 다른 협상 유형을 허용했습니다: 에이전트 주도 협상 혹은 리액티브 협상. 이 협상에서, 애매모호한 요청과 맞닥뜨렸을 경우, 서버는 사용 가능한 대체 리소스들에 대한 링크를 포함하고 있는 페이지를 회신하게 됩니다. 사용자는 해당 리소스들을 표시하고 사용하려는 리소스를 선택하게 됩니다.
+
+![Reactive Negotiation](/assets/images/http1-1SemanticsAndContent/ReactiveNegotiation.png)
+
+불행하게도, HTTP 표준은 그 과정을 쉽게 자동화하는 것을 지원하지 않고, 사용 가능한 리소스 중에서 선택하도록 허용하는 페이지의 형식을 명시하지 않고 있습니다. 게다가 서버 주도 협상으로의 회귀로, 이 방법은 스크립팅, 특히 자바스크립트 리다이렉션과 함께 거의 항상 사용됩니다: 협상 기준을 점검하고 난 뒤에, 스크립트는 리다이렉션을 실행합니다. 두번째 문제는 실제 리소스를 가져오는데 한 개 이상의 요청이 필요로 해서, 사용자에 대한 리소스 효용성이 떨어진다는 것입니다.
