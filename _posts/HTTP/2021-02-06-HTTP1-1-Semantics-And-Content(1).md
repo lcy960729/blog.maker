@@ -1,9 +1,9 @@
 ---
-title: 'HTTP 1.1 Reference - Semantics and Content (최종 수정 날짜 : 2021-02-06)'
-tags: Web HTTP
+title: 'HTTP 1.1 Reference - Semantics and Content (1) (최종 수정 날짜 : 2021-02-06)'
+tags: Web HTTP1.1
 categories: http
 author: CY
-key: HTTP 1.1 Reference - Semantics and Content
+key: HTTP 1.1 Reference - Semantics and Content (1)
 ---
 # 참고 자료
 * 이병록님이 번역하신 HTTP 1.1 Semantics and Content 번역본  
