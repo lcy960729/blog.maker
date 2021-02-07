@@ -101,7 +101,7 @@ text 타입의 미디어 하위 타입이 텍스트 줄바꿈을 할땐 CRLF를 
 
 #### 3.1.1.4. Multipart Types ( 참고 내용 : [https://qssdev.tistory.com/47](https://qssdev.tistory.com/47))
 
-단일 메시지 본문 내에서 하나 이상의 표현을 캡슐화한 여려 "multipart" 타입을 제공한다. 대부분 데이터 전송 'multipart/form-data' 타입을 사용하는 경우가 많다. 멀티파트 타입은 미디어 타입 값의 일부로 경계 매개변수를 포함한다. 경계 매개 변수를 얘를 들어 보면  아래와 같다.
+단일 메시지 본문 내에서 하나 이상의 표현을 캡슐화한 여려 "multipart" 타입을 제공한다. 대부분 데이터 전송 'multipart/form-data' 타입을 사용하는 경우가 많다. 멀티파트 타입은 미디어 타입 값의 일부로 경계 매개변수를 포함한다. 경계 매개 변수를 예를 들어 보면  아래와 같다.
 
 ```html
 <form action = "http://localhost/images"
@@ -240,10 +240,11 @@ Content-Location이 2xx(Successful) 응답 메시지에 포함되고 그 값이 
 요청 메시지로 Content-Location을 전송하는 사용자는 헤더에 보낼 값인 URI는 사용자가 이전에 Representation의 내용을 획득한 곳을 의미한다. 즉 사용자는 원래 Representation의 리소스에 대한 이전 링크를 제공하는 것이다.
 
 요청 메시지에서 Content-Location 필드를 수신하는 서버는 정보를 Representation의 일부로 저장하기 위한 메타 데이터가 아닌 임시 요청 컨텍스트로 취급해야한다. 서버는 요청 처리를 안내하거나 소스 링크 또는 버전 메타데이터 내의 다른 용도로 저장하기 위해 이 컨텍스트를 사용할 수 있다. 단 서버는 요청 의미를 변경하기 위해 이러한 컨텍스트 정보를 사용해서는 안된다.
-
-예를 들어 클라이언트가 협상된 리소스에 대해 PUT (리디렉션 x) 요청을 하고 서버가 PUT 요청을 수락하는 경우, 해당 리소스의 새로운 상태는 해당 PUT에 제공된 하나의 Representation과 일치할 것으로 예상된다. Content-Location은 협상된 표현 중 하나만 업데이트할 수 있는 역방향 컨텐츠 선택 식별자의 형태로 사용될 수 없다. 사용자가 후자의 의미를 원했다면 PUT을 Content-Location URI에 직접 적용했을것이다.
+예를 들어 클라이언트가 협상된 리소스에 대해 PUT (리디렉션 x) 요청을 하고 서버가 PUT 요청을 수락하는 경우, 해당 리소스의 새로운 상태는 해당 PUT에 제공된 하나의 Representation과 일치할 것으로 예상된다. Content-Location은 협상된 표현 중 하나만 업데이트할 수 있는 역방향 컨텐츠 선택 식별자의 형태로 사용될 수 없다.
+사용자가 후자의 의미를 원했다면 PUT을 Content-Location URI에 직접 적용했을것이다.
 
 > 솔직히 Content-Location 헤더의 역할과 의미가 잘 이해가 되지 않는다. 사용되는 예제도 잘 보이지 않을 뿐더러... 일단은 넘기는 걸로 (2021-02-06)
+> 다시 생각해보니 PUT /URL 요청시 Content-Location은 변경되는 리소스를 가르키는 /URL이 되어야한다는 의미인거같다. 만약 PUT /URL 요청시 Content-Location을 /URLe 라는 하나의 표현에 대한 업데이트를 한다는것은 말이 안되기 때문이다. Representation이라는 것은 리소스를 여러 모습으로 표현한것이지 변경되는것은 해당하는 표현이 아니라 리소스이기 때문이다. (라고 이해 했지만 아직 잘 ...) 
 
 ## 3.2. Representation Data
 HTTP 메시지와 관련된 표현 데이터는 메시지의 페이로드 본문으로 제공되거나 메시지 의미 및 유효한 요청 URI에 의해 참조 된다. representation data는 representation metadata 헤더 필드에서 정의한 형식과 인코딩이다.
