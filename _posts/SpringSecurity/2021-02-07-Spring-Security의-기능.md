@@ -1,5 +1,5 @@
 ---
-title: 'Spring Security의 기능 (최종 수정 날짜 : 2021-02-07)'
+title: 'Spring Security의 기능 (최종 수정 날짜 : 2021-02-22)'
 tags: Web SpringSecurity Spring
 categories: spring-security
 author: CY
@@ -342,3 +342,186 @@ HTTP 메서드 오버라이딩은 필터에서 발생한다. 해당 필터는 Sp
 웹 어플리케이션의 보안을 강화하는데 사용할 수 있는 많은 HTTP 응답 헤더가 있다. Spring Security가 명시적으로 지원하는 다양한 HTTP 응답 헤더를 설명한다. 필요한 경우 사용자 지정 헤더를 제공하도록 Spring Security를 구성할 수 있다.
 
 #### Default Security Headers
+스프링 시큐리티는 기본적인 보안 값을 제공하기 위해 보안 관련 HTTP 응답 헤더의 기본 집합을 제공한다.
+스프링 시큐리티의 기본값은 다음 헤더를 포한한다.
+```
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Content-Type-Options: nosniff
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+// Strict-Transport-Security는 HTTPS 요청에만 추가됩니다.
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+```
+기본값이 요구 사항을 충족하지 않는 경우 이러한 기본값에서 헤더를 쉽게 제거, 수정 또는 추가 할 수 있다. 
+
+#### Cache Control
+스프링 시큐리티의 기본값은 사용자 컨텐츠를 보호하기 위해 캐싱을 비활성화 하는 것이다.
+사용자가 민감한 정보를 보기 위해 인증한 다음 로그아웃하는 경우 악의적인 사용자가 뒤로 버튼을 클릭하여 민감한 정보를 볼 수 없도록 한다.
+기본적으로 전송되는 캐시 제어 헤더는 다음과 같다.
+```
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+```
+기본적인 보안을 유지하기 위해 스프링 시큐리티는 기본적으로 헤더를 추가한다. 그러나 응용 프로그램이 자체 캐시 제어 헤더를 제공하는 경우
+스프링 시큐리티는 중단된다. 이를 통해 어플리케이션은 CSS 및 JavaScript와 같은 정적 리소스를 캐시 할 수 있다.
+
+#### Content Type Options
+지금까지 Internet Explorer를 포함한 브라우저는 컨텐츠 스니핑(데이터의 파일 형식을 추론하는 방법)을 사용하여 요청의 content-type을 추측하려 했다. 
+이를 통해 브라우저는 content-type을 지정하지 않은 리소스의 content-type을 추측하여 사용자 경험을 개선 할 수 있었다. 
+예를 들어, 브라우저가 content-type이 지정되지 않은 JavaScript파일을 발견한 경우 content-type을 추측한 다음 실행할 수 있다.
+
+컨텐츠 업로드를 허용 할 때해야 할 많은 추가 작업이 있따.(예를 들어 고유한 도메인에 문서만 표시, content-type 헤더 설정 확인, 문서 삭제 등). 
+그러나 이러한 조치는 스프링 시큐리티가 제공하는 범위를 벗어난다. 컨텐츠 스니핑을 비활성화 할 때 제대로 작동하려면 content-type을 지정해야한다는 점을 지적하는것도 중요하다.
+
+컨텐츠 스니핑의 문제점은 악의적인 사용자가 다중 컨텐츠(즉, 여러 컨텐츠 유형으로 유효한 파일)를 사용하여 XSS 공격을 수행 할 수 있다는 것입니다. 
+예를 들어, 일부 사이트에서는 사용자가 유효한 postscript document를 웹 사이트에 제출하고 볼 수 있도록 허용 할 수 있다. 
+악의적인 사용자가 유효한 JavaScript 파일 인 postscript document를 만들어 XSS 공격을 수행 할 수 있다.
+[postscript document 취약점](https://asec.ahnlab.com/ko/1047/https://asec.ahnlab.com/ko/1047/)을 참고.
+
+스프링 시큐리티는 HTTP 응답에 다음 헤더를 추가하여 기본적으로 컨텐츠 스니핑을 비활성화 한다.
+```
+X-Content-Type-Options: nosniff
+```
+
+#### HTTP Strict Transport Security (HSTS)
+https 프로토콜을 생략하면 중간자 공격에 잠재적으로 취약하다. 웹 사이트가 https로 리디렉션을 수행하더라도 악의적 인 사용자가 
+초기 HTTP 요청을 가로 채서 응답을 조작 할 수 있다. (예 : https://악의적인 사이트.com으로 리디렉션하게 하고 자격 증명을 훔칠 수 있음)
+
+많은 사용자가 https 프로토콜을 생략하기 때문에 HTTP Strict Transport Security (HSTS)가 만들어졌다.
+예를 들어 mybank.example.com이 HSTS 호스트로 추가 되면 브라우저는 mybank.example.com에 대한 모든 요청이 
+https://mybank.example.com으로 해석되어야 함을 미리 알 수 있다. 이렇게 하면 중간자 공격이 발생할 가능성이 크게 줄어 든다.
+
+RFC 6797에 따라 HSTS 헤더는 HTTPS 응답에만 삽입된다. 브라우저가 헤더를 확인하려면 먼저 연결에 사용 된 SSL 인증서에 서명한 CA
+(SSL 인증서 뿐만 아니라)를 신뢰해야한다.
+
+사이트를 HSTS 호스트로 표시하는 한 가지 방법은 호스트를 브라우저에 미리 로드하는 것이다. 또 다른 방법은 Strict-Transport-Security 헤더를 
+응답에 추가하는 것이다. 예를 들어, Spring Security의 기본 동작은 브라우저가 도메인을 1년 동안 HSTS 호스트로 처리하도록 지시하는 다음 헤더를 추가하는 것이다.
+(1 년에 약 31536000초).
+```
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains ; preload
+```
+선택 사항 인 IncludeSubDomains 지시문은 하위 도메인 (예 : secure.mybank.example.com)도 HSTS 도메인으로 처리되어야 함을 브라우저에 지시합니다.
+선택적 preload 지시문은 도메인이 HSTS 도메인으로 브라우저에 사전로드 되어야 함을 브라우저에 지시합니다. 사용자가 HSTS Lists를 가지고 있지 않다면 
+Web Browser는 HTTP Protocol을 사용하여 접속을 하게 되는데 이때 SSL Stripping 공격을 받을 가능성이 있기 때문에 이것을 방지하기 위해 preload를 한다.
+Preloaded HSTS Lists에 포함되도록 하려면, "hstpreload.org" Site에 신청을 해야 한다. 또한 Web Browser 사용자가 직접 자신의 Web Browser에
+특정 Web Site를 HSTS List에 추가할 수 있도록 기능을 제공하기도 한다(예를 들어 크롬).
+
+#### HTTP Public Key Pinning (HPKP)
+패시브 상태를 유지하기 위해 스프링 시큐리티는 여전히 서블릿 환경에서 HPKP에 대한 지원을 제공하지만 위에 나열된 이유로 인해 보안팀에서 더이상 HPKP를 권장하지 않는다.
+HPKP는 위조 된 인증서로 MTM(Man in the Middle) 공격을 방지하기 위해 특정 웹서버에서 사용할 공개 키를 웹 클라이언트에 지정한다.
+HPKP가 올바르게 사용되면 손상된 인증서에 대한 보호를 할 수 있다. 그러나 HPKP의 복잡성으로 인해 많은 전문가들은 더 이상 사용을 권장하지 않으며 Chrome은 더 이상 지원하지 않는다.
+
+#### X-Frame-Options
+웹 사이트를 프레임에 추가하는 것은 보안 문제가 될 수 있다. 예를 들어, 영리한 CSS 스타일을 사용하는 사용자는 의도하지 않은 것을 클릭하도록 속일 수 있다.
+예를 들어 은행에 로그인 한 사용자가 다른 사용자에게 엑세스 권한을 부여하는 버튼을 클릭 할 수 있다. 이러한 종류의 공격을 클릭 재킹이라고 한다.
+(클릭 재킹 ClickJacking이란 사용자가 인식하는것과 다른것을 클릭 하도록 사용자를 속여 잠재적으로 
+기밀 정보를 노출하거나 다른 사람이 컴퓨터를 제어하도록 허용 하는 악의 적인 기술)
+
+클릭 재킹을 처리하는 또 다른 현대적인 접근 방식은 컨텐츠 보안 정책(CSP)을 사용하는 것이다.
+
+클릭 재킹 공격을 완화하는 방법에는 여러가지가 있다. 예를 들어, 기존 브라우저를 클릭 재킹 공격으로부터 보호하기 위해 프레임 브레이킹 코드를 사용할 수 있다.
+완벽하지는 않지만 프레임 분리 코드는 레거시 브라우저에서 할 수 있는 최선의 방법이다.
+
+클릭 재킹을 해결하기 위한 현대적인 방법은 X-Frame-Options 헤더를 사용하는것이다. 기본적으로 Spring Security는 다음 헤더를 사용하여
+iframe 내에서 페이지 렌더링을 비활성화 한다.
+```
+X-Frame-Options: DENY
+```
+
+#### X-XSS-Protection
+일반 브라우저는 XSS 공격을 필터링하는 기능을 내장하고 있다. 이것은 절대적으로 안전하지는 않지만 XSS 보호에 도움이 된다.
+필터링은 기본적으로 활성화 되어 있으므로 헤더를 추가하면 일반적으로 활성화되도록 보장하고 XSS 공격이 탐지 될 때 브라우저에 수행할 작업을 지시한다.
+예를 들어 필터는 모든 것을 렌더링하기 위해 가장 덜 침습적인 방식으로 컨텐츠를 변경하려 할 수 있다. 때떄로 이러한 유형의 교체는 그 자체로 XSS 취약점이 될 수 있다.
+대신 컨텐츠를 수정하는 것보다 차단하는것이 가장 좋다. 기본적으로 Spring Security는 다음 헤더를 사용하여 컨텐츠를 차단한다.
+```
+X-XSS-Protection: 1; mode=block
+```
+
+#### Content Security Policy (CSP)
+CSP(컨텐츠 보안 정책)은 웹 애플리케이션이 XSS와 같은 컨텐츠 주입 취약성을 완화하기 위해 활용할 수 있는 메커니즘이다. 
+CSP는 웹 응용 프로그램 작성자가 웹 응용 프로그램이 리소스를 로드 할 것으로 예상하는 소스에 대해 선언하고 궁극적으로 클라이언트에게 
+알리는 기능을 제공하는 선언적 정책이다.
+
+CSP는 모든 컨텐츠 삽입 취약점을 해결하기 위한 것이 아니다. 대신 CSP를 활용하여 컨텐츠 삽입 공격으로 인한 피해를 줄일 수 있다.
+첫번째 방어선으로 웹 애플리케이션 작성자는 입력의 유효성을 검사하고 출력을 인코딩해야한다.
+
+웹 애플리케이션은 응답에 다음 HTTP 헤더 중 하나를 포함하여 CSP를 사용 할 수 있다.
+* `Content-Security-Policy`
+* `Content-Security-Policy-Report-Only`
+이러한 각 헤더는 클라이언트에 보안 정책을 전달하는 메커니즘으로 사용 된다. 보안 정책에는 특정 리소스 representation에 대한 제한을 
+선언하는 보안 정책 지시문 집합이 포함된다.
+
+예를 들어 웹 애플리케이션은 응답에 다음 헤더를 포함하여 신뢰할 수 있는 특정 소스에서 스크립트를 로드 할 것으로 예상한다고 선언 할 수 있다.
+```
+Content-Security-Policy: script-src https://trustedscripts.example.com
+```
+`script-src`지시문에 선언된 것 이외의 다른 소스에서 스크립트를 로드하려는 시도는 user-agent에 의해 차단된다. 
+또한 report-url 지시문이 보안 정책에 선언 된 경우 사용자 에이전트는 선언 된 URL에 위반 사항을 보고한다.
+
+예를 들어 웹 애플리케이션이 선언 된 보안 정책을 위반하는 경우 다음 응답 헤더는 정책의 report-uri 지시문에 지정된 URL로 위반 보고서를 보내도록 
+user-agent에 지시한다.
+```
+Content-Security-Policy: script-src https://trustedscripts.example.com; report-uri /csp-report-endpoint/
+```
+위반 보고서는 웹 애플리케이션 자체 API 또는 https://report-uri.io/와 같이 공개적으로 호스팅 되는 CSP 위반 보고 서비스에서 캡처 할 수 있는 표준 JSON 구조이다.
+
+Content-Security-Policy-Report-Only 헤더는 웹 어플리케이션 작성자 및 관리자가 보안 정책을 시행하는 대신 모니터링 할 수 있는 기능을 제공한다. 
+이 헤더는 일반적으로 사이트에 대한 보안 정책을 실험 및 개발 할 때 사용된다. 정책이 유효한 것으로 간주되면 대신 Content-Security-Policy 헤더 필드를 사용하여 적용 할 수 있다.
+```
+Content-Security-Policy-Report-Only: script-src 'self' https://trustedscripts.example.com; report-uri /csp-report-endpoint/
+```
+
+사이트가 이 정책을 위반하는 경우 evil.com에서 스크립트를 로그하려고 시도하면 user-agent는 report-uri 지시문에 선언 된 URL로 위반 보고서를 보내지만
+그래도 위반 리소스가 로드되도록 허용한다.
+
+#### Referrer Policy
+Referrer Policy은 웹 어플리케이션이 사용자가 마지막을 방문한 페이지를 포함하는 referrer 필드를 관리하는데 활용할 수 있는 메커니즘이다.
+Spring Security의 접근 방식은 다른 정책을 제공하는 Referrer-Policy 헤더를 사용하는 것이다.
+```
+Referrer-Policy: same-origin
+```
+Referrer-Policy 응답 헤더는 대상이 사용자가 이전에 있었던 소스를 알도록 브라우저에 지시한다.
+
+#### Feature Policy
+Feature Policy은 웹 개발자가 브라우저에 특정 API 및 웹 기능의 동작을 선택적으로 활성화, 비활성화 및 수정할 수 있도록하는 메커니즘이다.
+```
+Feature-Policy: geolocation 'self'
+```
+Feature Policy을 통해 개발자는 브라우저가 사이트 전체에서 사용되는 특정 기능에 적용할 'policies'집합을 선택할 수 있다. 
+이러한 정책은 사이트가 특정 기능에 대한 브라우저의 기본 동작에 엑세스 하거나 수정할 수 있는 API를 제한한다.
+
+#### Clear Site Data
+Clear Site Data는 HTTP 응답에 다음 헤더가 포함 된 경우 브라우저 측 데이터(쿠키, 로컬 저장소 등)를 제거 할 수 있는 메커니즘이다.
+```
+Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"
+```
+이것은 로그아웃시 수행 할 수 있는 좋은 정리 작업이다.
+
+#### Custom Headers
+Spring Security는 어플리케이션에 보안 헤더를 편리하게 추가 할 수 있는 메커니즘이 있다. 
+그러나 사용자 지정 헤더를 추가할 수 있는 후크도 제공한다.
+
+### 5.2.3. HTTP
+정적 리소스를 포함한 HTTP 기반 통신은 TLS를 사용하여 보호해야 한다.
+
+프레임 워크로서 Spring Security는 HTTP 연결을 처리하지 않으므로 HTTPS를 직접 지원하지 않는다. 
+그러나 HTTPS 사용에 도움이 되는 여러 기능을 제공한다.
+
+#### Redirect to HTTPS
+클라이언트가 HTTP를 사용할 때 HTTPS로 리디렉션하도록 구성할 수 있다.
+
+#### Strict Transport Security
+Spring security는 Strict Transport Security에 대한 지원을 제공하며 기본적으로 활성화 한다.
+
+#### Proxy Server Configuration
+프록시 서버를 사용하는 경우 어플리케이션을 올바르게 구성했는지 확인 하는 것이 중요하다. 
+예를 들어 많은 어플리케이션에는 적절한 구성 없이 http://192.168.1:8080에 어플리케이션 서버로 요청을 전달하여 https://example.com/ 요청에 응답하는 로드 밸런서가 있다.
+어플리케이션 서버는 로드 밸런서가 존재하는지 모르고 요청을 https://192.168.1:8080이 클라이언트에서 요청한 것처럼 처리한다.
+
+이 문제를 해결하려면 RFC7239를 사용하여 로드 밸런서를 사용하도록 지정할 수 있다. 어플리케이션이 이를 인식하도록 하려면 X-Forwarded 헤더를 인식하는 어플리케이션 서버를 구성해야 한다.
+예를 들어 Tomcat은 RemoteValve를 사용하고 Jetty는 FowardedRequestCustomizer를 사용한다. Spring 사용자는 ForwardedHeaderFilter를 활용할 수 있다.
+
+Spring Boot 사용자는 server.user-forward-headers 속성을 사용하여 어플리케이션을 구성할 수 있다.

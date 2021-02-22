@@ -1,5 +1,5 @@
 ---
-title: 'HTTP 1.1 Reference - Semantics and Content (2) (최종 수정 날짜 : 2021-02-09)'
+title: 'HTTP 1.1 Reference - Semantics and Content (2) (최종 수정 날짜 : 2021-02-22)'
 tags: Web HTTP1.1
 categories: http
 author: CY
@@ -14,8 +14,8 @@ key: HTTP 1.1 Reference - Semantics and Content (2)
 이외 자료는 내용 중 링크 추가
 ##### 틀린 내용, 부족한 내용 꼭 지적 부탁드립니다!
 
-# 1. Request Methods
-## 1.1 Overview
+# 4. Request Methods
+## 4.1 Overview
 Request 메소드 토큰은 Request 요청에서 가장 큰의미를 나타내며 클라이언트가 요청을 한 목적과 성공적인 결과로 클라이언트가 기대하는것을 나타낸다.
 (GET 요청을 했다면 리소스를 가져오는 목적이였을 것이며, 반환 값으로는 해당 리소스를 원했을 것이다)
 Request 메소드의 의미론은 Request에 어떠한 헤더 필드가 있을 때, 추가된 의미론과 메소드가 충돌되지 않는 경우 더 적합할 수 있다. 예를 들어 클라이언트는 조건부 요청 헤더 필드를 보내 대상 리소스의 현재 상태를 조건으로 요청된 작업을 수행 할 수 있다.
@@ -156,9 +156,9 @@ DELETE 요청 메시지 내의 페이로드에는 정의된 의미가 없으며,
 DELETE 메서드에 대한 응답은 캐시할 수 없다. 요청 URI에 대해 하나 이상의 저장된 응답이 있는 캐시를 통해 DELETE 요청이 전달되는 경우 저장된 응답은 무효화 된다.
 
 ### 4.3.6. CONNECT
-CONNECT 메서드는 수신자에게 요청 대상으로 식별된 대상 서버에 터널을 설정하도록 요청하고, 그 후, 터널이 닫힐 때까지 패킷의 블라인드 포워딩으로 동작을 제한한다. 터널은 일반적으로 하나 이상의 프록시를 통해 end-to-end 가상 커넥션을 생성하는 데 사용되며, 이후 TSL(Transport Layer Security)를 사용하여 보안을 유지할 수 있다.
+CONNECT 메서드는 수신자에게 요청 대상으로 식별된 대상 서버에 터널(양방향 연결)을 설정하도록 요청하고, 그 후, 터널이 닫힐 때까지 패킷의 블라인드 포워딩으로 동작을 제한한다. 터널은 일반적으로 하나 이상의 프록시를 통해 end-to-end 가상 커넥션을 생성하는 데 사용되며, 이후 TSL(Transport Layer Security)를 사용하여 보안을 유지할 수 있다.
 
-CONNECT는 프록시에 대한 요청에서만 사용할 수 있다. 스스로 CONNECT 요청을 수신한 서버는 2xx (Successful) 상태 코드로 응답하여 커넥션이 설정되었음을 표시한다. 그러나 대부분의 서버는 CONNECT를 구현하지 않는다.
+CONNECT는 프록시에 대한 요청에서만 사용할 수 있다. 자신에게 CONNECT 요청을 수신한 서버는 2xx (Successful) 상태 코드로 응답하여 커넥션이 설정되었음을 표시한다. 그러나 대부분의 서버는 CONNECT를 구현하지 않는다.
 
 CONNECT 요청을 전송하는 클라이언트는 요청 대상의 권한 양식을 전송해야 한다. 즉, 요청 대상은 콜론으로 구분된 터널 대상의 호스트 이름과 포트번호로만 구성된다.
 ```
@@ -181,3 +181,88 @@ Proxy-Authorization: basic aGVsbG86d29ybGQ=
 CONNECT 요청 메시지 내의 페이로드는 의미론을 정의하지 않는다; CONNECT 요청에 페이로드 본체를 전송하면 일부 기존 구현이 요청을 거부할 수 있다.
 
 CONNECT 메서드에 대한 응답은 캐시할 수 없다.
+
+> CONNECT에 대해선 더 학습이 필요할것같다
+
+### 4.3.7. OPTIONS
+OPTION 메서드는 대상 리소스에 사용할 수 있는 통신 옵션에 대한 정보를 오리진 서버 또는 중개자에게 요청한다.
+이 메서드를 사용하면 클라이언트가 리소스 작업을 암시하지 않고 리소스 또는 서버의 기능과 관련된 옵션 또는 요구 사항을 결정할 수 있다.
+
+" * "를 요청 대상으로 하는 OPTIONS 요청은 특정 리소스가 아닌 일반적으로 서버에 적용된다. 
+서버의 통신 옵션은 일반적으로 리소스에 따라 다르기 때문에, " * " 요청은 "ping" 또는 "no-op" 유형의 메소드만 유효하며, 
+클라이언트가 서버의 기능을 테스트할 수 있도록 허용하는것 외에는 아무것도 하지 않는다. 예를 들어, HTTP/1.1 적합성(적합하지 않은지)에 대한 프록시를 테스트하는 데 사용할 수 있다.
+
+요청 대상이 별표가 아닌 경우 OPTION 요청은 대상 리소스와 통신할 때 사용할 수 있는 옵션에 적용된다.
+
+OPTION에 대한 성공적인 응답을 생성하는 서버는 이 명세에 정의되지 않은 잠재적 확장을 포함하여 서버가 구현하고
+대상 리소스(e.g, Allow)에 적용할 수 있는 선택적 기능을 나타낼 수 있는 헤더 필드를 전송해야한다.
+
+![OPTIONS 예제](/assets/images/http1-1SemanticsAndContent/OPTIONS.png)  
+사진처럼 URL에 OPTIONS 헤더를 보내면 allow 헤더를 통해 어떤 메서드를 사용할 수 있는지 나타난다.
+
+응답 페이로드(있는 경우)는 기계나 사람이 읽을 수 있는 representation에서 통신 옵션을 설명할 수도 있다. 이러한 representation에 대한 
+표준 형식은 이 명세에 의해 정의되지 않지만 HTTP에 대한 향후 확장에 의해 정의될 수 있다. 응답에서 페이로드 본문을 전송하지 않으려면 서버는
+"0"의 값을 가진 Content-Length 필드를 생성해야 한다.
+
+클라이언트 OPTIONS 요청의 Max-Forwards 헤더 필드를 요청 체인의 특정 수신자를 대상으로 보낼 수 있다.
+요청이 Max-Forwards 필드와 수신되지 않은 경우 프록시는 요청을 전달하는 동안 MaxForwards 헤더 필드를 생성해서는 안 된다.  
+[MAX-Forwards](https://withbundo.blogspot.com/2017/08/http-15-http-v-max-forwards-proxy.html)에 대해선
+이 분의 블로그에 잘 설명 되어 있으므로 참고하길 바란다.
+
+페이로드 본문을 포함하는 OPTIONS 요청을 생성하는 클라이언트는 representation의 미디어 타입 유형을 설명하는 유효한 Content-Type 헤더 필드를 전송해야 한다.
+이 명세는 이러한 페이로드에 대한 사용을 정의하지 않지만, 이 후 HTTP에 대한 확장은 OPTIONS 본문을 사용하여 대상 리소스에 대한 보다 상세한 쿼리를 할 수 있다.
+
+OPTIONS 메서드에 대한 응답은 캐시 할 수 없다.
+
+CORS에서 OPTIONS 메소드를 통해 프리플라이트 요청, 즉 사전 요청을 보내 서버가 해당 parameters를 포함한 요청을 보내도 되는지에 대한 응답을 줄 수 있게 한다.
+
+Access-Control-Request-Method 헤더는 프리플라이트 요청의 일부분으로 서버에게 실제 요청이 전달 될 때 POST 요청 메소드로 전달될 것 임을 명시한다.
+
+Access-Control-Request-Headers 헤더는 서버에게 실제 요청이 전달될 때 `X-PINGOTHER` 와 `Content-Type` custom headers 와 함께 전달될 것 임을 명시한다.
+서버는 그럼 이러한 요구사항들에 맞춰 요청을 수락할 것인지 정할 수 있다.
+```
+OPTIONS /resources/post-here/ HTTP/1.1
+Host: bar.other
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Connection: keep-alive
+Origin: http://foo.example
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: X-PINGOTHER, Content-Type
+```
+아래 응답을 보면 서버는 `Access-Control-Allow-Methods`로 응답하고, POST, GET 그리고 OPTIONS 메소드를 통해서 해당하는 자원을 query할 수 있음을 알려준다.
+이 헤더는 Allow 응답 헤더와 비슷하지만 반드시 CORS에 한해서만 사용된다.
+```
+HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 01:15:39 GMT
+Server: Apache/2.0.61 (Unix)
+Access-Control-Allow-Origin: http://foo.example
+Access-Control-Allow-Methods: POST, GET, OPTIONS
+Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
+Access-Control-Max-Age: 86400
+Vary: Accept-Encoding, Origin
+Content-Encoding: gzip
+Content-Length: 0
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+```
+### 4.3.8. TRACE
+TRACE 메서드는 요청 메시지의 원격 어플리케이션-레벨 루프백을 요청한다. 
+요청의 최종 수신자는 아래에 설명된 일부 필드를 제외하고 수신된 메시지를 
+"message/http"의 내용 유형으로 200(OK) 응답의 메시지 본문으로 클라이언트에 다시 반영해야 한다.
+최종 수신자는 요청에서 Max_Forwards의 0값을 수신한 첫 번째 서버 또는 원 서버 이다.
+
+클라이언트는 TRACE 요청에서 응답에 의해 공개될 수 있는 중요한 데이터를 포함하여 헤더필드를 생성해서는 안 된다.
+예를 들어 사용자가 에이전트가 저장된 사용자 자격 증명 또는 쿠기를 TRACE 요청으로 전송하는 것은 어리석은 일이다.
+요청의 최종 수신자는 응답 본문을 생성할 때 중요한 데이터를 포함할 가능성이 있는 요청 헤더 필드를 제외해야한다.
+
+TRACE는 클라이언트가 요청 체인의 다른 쪽 끝에서 수신되는 것을 확인하고 테스트 또는 진단 정보를 위해 해당 데이터를 사용할 수 있도록 한다.
+via 헤더 필드의 값은 요청 체인의 추적 역할을 하므로 특히 중요하다. Max-Forwards 헤더 필드를 사용하면 클라이언트가 요청 체인의 길이를 제한할 수 있으며,
+이는 무한 루프에서 메시지 전달 프록시 체인을 테스트하는데 유용하다.
+
+클라이언트는 TRACE 요청으로 메시지 본문을 보내서는 안된다.
+
+TRACE 메서드에 대한 응답은 캐시할 수 없다.

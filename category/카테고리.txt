@@ -1,0 +1,75 @@
+sass에서
+page.scss 고대로 복사하여 page-Categoris.scss 추가
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+main.scss
+    "layout/page-Categoris",추가
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+layout/page.html 고대로 복사하여 page-Categoris.html 추가
+layout/page-Categoris.html
+      <!-- 카테 고리 추가를 위한 수정-->
+      <div class="page__center">
+        {%- include category.html -%}
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+include/paginator.html 수정
+페이지 네이터 넘어가는 거 수정
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+카테고리 폴더에
+페이지 네이터를 표시할 카테고리에 front matter 작성
+---
+layout: category
+title: linux
+
+pagination: 
+  category: 'linux'
+  enabled: true
+  permalink: '/linux/page:num/'
+  indexpage: 'linux'
+---
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+layouts/카테고리 html 작성
+---
+layout: articles
+show_title: true
+---
+<!-- site.categories[category] -->
+<ul class="posts-list">
+  {% assign category = page.category | default: page.title %}
+  {% for post in paginator.posts %}
+    <li>
+      <h3>
+        <a href="{{ site.baseurl }}{{ post.url }}">
+          {{ post.title }}
+        </a>
+        <small>{{ post.date | date_to_string }}</small>
+      </h3>
+      {{ post.excerpt }}
+    <hr style="height: 1px; background-color: rgb(218, 218, 218); border: none;">
+    </li>
+  {% endfor %}
+</ul>
+
+{%- include paginator.html -%}
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+include/카테고리 html 작성
+
+{% capture site_categories %}{% for category in site.categories %}{{ category | first }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
+{% assign categories_list = site_categories | split:',' | sort %}
+<header class="site-category" >
+  <ul class="entry-meta inline-list">
+    <h1>Categories</h1>
+    <hr>
+    {% for item in (0..site.categories.size) %}{% unless forloop.last %}
+      {% capture this_word %}{{ categories_list[item] | strip_newlines }}{% endcapture %}
+      <li><a href="/category/{{this_word }}" class="tag">
+      <span class="term">{{ this_word }}</span>
+      <span class="count">({{ site.categories[this_word].size }})</span>
+      </a></li>
+    {% endunless %}{% endfor %}
+  </ul>
+</header>
